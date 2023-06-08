@@ -257,7 +257,7 @@ class User{
         }
     
     }
-
+    
 
 
     /**
@@ -276,16 +276,52 @@ class User{
             'cost' => 12
             ];
 
-            $q = $db->prepare("UPDATE users SET full_name=:full_name WHERE id=:id");
+            $q = $db->prepare("UPDATE users SET full_name=:full_name, adress=:adress, city=:city, zip_code=:zip_code, country=:country WHERE id=:id");
             $q->execute([
-            'id' => $user['id'],
-            'full_name'=> $post['post_full_name']
+                'id' => $user['id'],
+                'full_namen'=> $post['post_full_name'],
+                'adress'=> $post['post_adress'],
+                'city'=> $post['post_city'],
+                'zip_code'=> $post['post_zip_code'],
+                'country'=> $post['post_country']
             ]);
 
             return 0;
     
         }
     
+
+
+    /**
+        * Editing user description information
+        *
+        * @param Object database connection
+        *
+        * @param array user information
+        *
+        * @param array post user information
+        *
+        */
+    public function UserEditDescription($db,$user,$post){
+
+        $options = [
+        'cost' => 12
+        ];
+
+        $q = $db->prepare("UPDATE users SET description=:description, themes=:themes, interest=:interest, music=:music WHERE id=:id");
+        $q->execute([
+        'id' => $user['id'],
+        'description'=> $post['post_description'],
+        'themes'=> $post['post_themes'],
+        'interest'=> $post['post_interest'],
+        'music'=> $post['post_music']
+        ]);
+
+        return 0;
+
+    }
+
+
 
 
     /**

@@ -102,7 +102,7 @@ class Database{
         `id` int NOT NULL AUTO_INCREMENT,
         `organizer` varchar(255) NOT NULL,
         `category` varchar(255) NOT NULL,
-        `photo` varchar(255) NOT NULL,
+        `picture` varchar(255) NOT NULL,
         `description` varchar(255) NOT NULL,
         `themes` varchar(255) NOT NULL,
         `interest` varchar(255) NOT NULL,
@@ -139,7 +139,7 @@ class Database{
         CREATE TABLE IF NOT EXISTS `users` (
         `id` int NOT NULL AUTO_INCREMENT,
         `type` varchar(255) NOT NULL,
-        `photo` varchar(255) NOT NULL,
+        `picture` varchar(255) NOT NULL,
         `full_name` varchar(255) NOT NULL,
         `email` varchar(255) NOT NULL,
         `identifier` varchar(255) NOT NULL,
@@ -156,6 +156,7 @@ class Database{
         `user_key` varchar(255) NOT NULL,
         `recovery_key` varchar(255) NULL,
         `recovery_date` varchar(255) NULL,
+        `update_date` varchar(255) NULL,
         `asset` varchar(255) NOT NULL,
         `code` varchar(255) NOT NULL,
         PRIMARY KEY (`id`)
