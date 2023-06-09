@@ -302,7 +302,7 @@ class User{
         * @param array post user information
         *
         */
-    public function UserEditDescription($db,$user,$post){
+    public function UserEditDescription($db,$user,$post,$themes,$interest,$music){
 
         $options = [
         'cost' => 12
@@ -312,9 +312,9 @@ class User{
         $q->execute([
         'id' => $user['id'],
         'description'=> $post['post_description'],
-        'themes'=> $post['post_themes'],
-        'interest'=> $post['post_interest'],
-        'music'=> $post['post_music']
+        'themes'=> $themes,
+        'interest'=> $interest,
+        'music'=> $music
         ]);
 
         return 0;

@@ -1,16 +1,31 @@
 <!-- Navigation bar -->
 
-<nav class="uk-navbar-container" uk-navbar>
-    <div class="uk-navbar-left">
-        <ul class="uk-navbar-nav">
-            <li class="uk-active"><a href="index.php"> Yvelines Party </a></li>
-            <li class="uk-parent"><a href=""> Profil </a></li>
-            <div class="uk-margin">
-            <form class="uk-search uk-search-default">
-                <span class="uk-search-icon-flip" uk-search-icon></span>
-                <input class="uk-search-input" type="search" placeholder="Search" aria-label="Search">
+<nav class="uk-navbar-container uk-padding-small" uk-navbar>
+
+    <div class="nav-overlay uk-navbar-left">
+
+        <a class="uk-navbar-item uk-logo" href="index.php">Yvelines party</a>
+
+        <a class="uk-navbar-item uk-logo" href="index.php?page=user">Compte</a>
+
+    </div>
+
+    <div class="nav-overlay uk-navbar-right">
+
+        <a class="uk-navbar-toggle" uk-search-icon uk-toggle="target: .nav-overlay; animation: uk-animation-fade"></a>
+
+    </div>
+
+    <div class="nav-overlay uk-navbar-left uk-flex-1" hidden>
+
+        <div class="uk-navbar-item uk-width-expand" >
+            <form class="uk-search uk-search-navbar uk-width-1-1" method='get' action='index.php'>
+                <input class="uk-search-input" type="search" name='q' placeholder="Rechercher" aria-label="Search" autofocus>
             </form>
         </div>
-        </ul>
+
+        <a class="uk-navbar-toggle" uk-close uk-toggle="target: .nav-overlay; animation: uk-animation-fade"></a>
+
     </div>
+
 </nav>

@@ -54,19 +54,28 @@ class Database{
         START TRANSACTION;
         SET time_zone = '+00:00';
 
+        DROP TABLE IF EXISTS `approvals`;
+        CREATE TABLE IF NOT EXISTS `approvals` (
+        `id` int NOT NULL AUTO_INCREMENT,
+        `id_user` int NOT NULL,
+        `id_party` int NOT NULL,
+        `statue` varchar(255) NOT NULL,
+        PRIMARY KEY (`id`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
         DROP TABLE IF EXISTS `bans`;
         CREATE TABLE IF NOT EXISTS `bans` (
         `id` int NOT NULL AUTO_INCREMENT,
         `type` varchar(255) NOT NULL,
-        `original_user` varchar(255) NOT NULL,
-        `banned_user` varchar(255) NOT NULL,
+        `id_original_user` int NOT NULL,
+        `id_banned_user` int NOT NULL,
         `description` varchar(255) NOT NULL,
         `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-        DROP TABLE IF EXISTS `comment`;
-        CREATE TABLE IF NOT EXISTS `comment` (
+        DROP TABLE IF EXISTS `comments`;
+        CREATE TABLE IF NOT EXISTS `comments` (
         `id` int NOT NULL AUTO_INCREMENT,
         `full_name` varchar(255) NOT NULL,
         `email` varchar(255) NOT NULL,
@@ -75,11 +84,11 @@ class Database{
         `answer` varchar(255) NOT NULL,
         PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-        COMMIT;
 
         DROP TABLE IF EXISTS `connections`;
         CREATE TABLE IF NOT EXISTS `connections` (
         `id` int NOT NULL AUTO_INCREMENT,
+        `id_user` int NOT NULL,
         `ip` varchar(255) NOT NULL,
         `appareil` varchar(255) NOT NULL,
         `navigateur` varchar(255) NOT NULL,
@@ -90,8 +99,8 @@ class Database{
         DROP TABLE IF EXISTS `discussions`;
         CREATE TABLE IF NOT EXISTS `discussions` (
         `id` int NOT NULL AUTO_INCREMENT,
-        `transmitter` varchar(255) NOT NULL,
-        `recipient` varchar(255) NOT NULL,
+        `id_transmitter` int NOT NULL,
+        `id_recipient` int NOT NULL,
         `message` varchar(255) NOT NULL,
         `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (`id`)
@@ -100,6 +109,7 @@ class Database{
         DROP TABLE IF EXISTS `partys`;
         CREATE TABLE IF NOT EXISTS `partys` (
         `id` int NOT NULL AUTO_INCREMENT,
+        `name` varchar(255) NOT NULL,
         `organizer` varchar(255) NOT NULL,
         `category` varchar(255) NOT NULL,
         `picture` varchar(255) NOT NULL,
@@ -113,12 +123,14 @@ class Database{
         `to_date` varchar(255) NOT NULL,
         `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `max_participants` int NOT NULL,
+        `asset` varchar(255) NOT NULL,
         PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
         DROP TABLE IF EXISTS `reports`;
         CREATE TABLE IF NOT EXISTS `reports` (
         `id` int NOT NULL AUTO_INCREMENT,
+        `id_author` int NOT NULL,
         `type` varchar(255) NOT NULL,
         `description` varchar(255) NOT NULL,
         `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -128,6 +140,7 @@ class Database{
         DROP TABLE IF EXISTS `searchs`;
         CREATE TABLE IF NOT EXISTS `searchs` (
         `id` int NOT NULL AUTO_INCREMENT,
+        `author` varchar(255) NOT NULL,
         `category` varchar(255) NOT NULL,
         `element` varchar(255) NOT NULL,
         `link` varchar(255) NOT NULL,
@@ -144,25 +157,25 @@ class Database{
         `email` varchar(255) NOT NULL,
         `identifier` varchar(255) NOT NULL,
         `password` varchar(255) NOT NULL,
-        `description` varchar(255) NULL,
-        `themes` varchar(255) NULL,
-        `interest` varchar(255) NULL,
-        `music` varchar(255) NULL,
+        `description` varchar(255) DEFAULT NULL,
+        `themes` varchar(255) DEFAULT NULL,
+        `interest` varchar(255) DEFAULT NULL,
+        `music` varchar(255) DEFAULT NULL,
         `adress` varchar(255) NOT NULL,
         `city` varchar(255) NOT NULL,
         `zip_code` varchar(255) NOT NULL,
         `country` varchar(255) NOT NULL,
         `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `user_key` varchar(255) NOT NULL,
-        `recovery_key` varchar(255) NULL,
-        `recovery_date` varchar(255) NULL,
-        `update_date` varchar(255) NULL,
+        `recovery_key` varchar(255) DEFAULT NULL,
+        `recovery_date` varchar(255) DEFAULT NULL,
+        `update_date` varchar(255) DEFAULT NULL,
         `asset` varchar(255) NOT NULL,
-        `code` varchar(255) NOT NULL,
+        `two_factor_auth` varchar(255) NOT NULL,
+        `code` varchar(255) NULL,
         PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
         COMMIT;
-        
         ");
 
         $q->execute();
