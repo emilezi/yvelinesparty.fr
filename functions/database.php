@@ -153,8 +153,10 @@ class Database{
         `id` int NOT NULL AUTO_INCREMENT,
         `type` varchar(255) NOT NULL,
         `picture` varchar(255) NOT NULL,
-        `full_name` varchar(255) NOT NULL,
+        `first_name` varchar(255) NOT NULL,
+        `last_name` varchar(255) NOT NULL,
         `email` varchar(255) NOT NULL,
+        `phone` varchar(255) NOT NULL,
         `identifier` varchar(255) NOT NULL,
         `password` varchar(255) NOT NULL,
         `description` varchar(255) DEFAULT NULL,
@@ -175,6 +177,9 @@ class Database{
         `code` varchar(255) NULL,
         PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+        INSERT INTO `users` (`id`, `type`, `picture`, `first_name`, `last_name`, `email`, `phone`, `identifier`, `password`, `description`, `themes`, `interest`, `music`, `adress`, `city`, `zip_code`, `country`, `date`, `user_key`, `recovery_key`, `recovery_date`, `update_date`, `asset`, `two_factor_auth`, `code`) VALUES ('1', 'admin', 'ressources/img/profile_picture.jpg', 'Administrateur', 'Yvelinesparty', 'administrateur@yvelinesparty.fr', '+33768379372', 'administrateur', '$2y$12$8aO5RRTgJeqBMKhtQxaXQ.FfBEHda0krsnQszcoclZaIBUUSffWFW', NULL, NULL, NULL, NULL, '2 Av. Paul Vaillant Couturier', 'Bois d\'Arcy', '78390', 'France', CURRENT_TIMESTAMP, '3699344387be191b5169fb72a8f830fe', NULL, NULL, NULL, 'yes', 'no', NULL);
+
         COMMIT;
         ");
 

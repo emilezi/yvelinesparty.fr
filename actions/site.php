@@ -37,17 +37,17 @@ if ($Database->CheckConnection() == 0) {
             
                     require 'public/page/site_element/admin/comments.php';
                                 
-                }elseif($_SESSION['type'] == 'admin' && $_GET['page'] == "reporting"){
+                }elseif($_SESSION['type'] == 'admin' && $_GET['page'] == "reportings"){
                 
-                    require 'public/page/site_element/admin/reporting.php';
+                    require 'public/page/site_element/admin/reportings.php';
                 
                 }elseif($_SESSION['type'] == 'admin' && $_GET['page'] == "statistics"){
                 
                     require 'public/page/site_element/admin/statistics.php';
                 
-                }elseif($_SESSION['type'] == 'admin' && $_GET['page'] == "user"){
+                }elseif($_SESSION['type'] == 'admin' && $_GET['page'] == "users"){
                 
-                    require 'public/page/site_element/admin/user.php';
+                    require 'public/page/site_element/admin/users.php';
                 
                 }elseif($_GET['page'] == "message"){
             
@@ -83,7 +83,7 @@ if ($Database->CheckConnection() == 0) {
                 
                 }elseif($_GET['page'] == "user"){
                 
-                    require 'public/page/site_element/user/user.php';
+                    require 'public/page/site_element/user/profile.php';
                 
                 }else{
 
@@ -107,7 +107,7 @@ if ($Database->CheckConnection() == 0) {
     
             if(isset($_GET['page']) && !empty($_GET['page'])){
     
-                if($_GET['page'] == "views_party"){
+                if($_GET['page'] == "views_party" && isset($_GET['party']) && !empty($_GET['party'])){
                 
                     require 'public/page/site_element/party/views_party.php';
                 
@@ -115,13 +115,13 @@ if ($Database->CheckConnection() == 0) {
             
                     require 'public/page/site_element/user/password_recovery.php';
                                 
-                }elseif($_GET['page'] == "register"){
+                }elseif($_GET['page'] == "user_register"){
                 
                     require 'public/page/site_element/user/register.php';
                 
                 }elseif($_GET['page'] == "user"){
                 
-                    require 'public/page/site_element/user/user.php';
+                    require 'public/page/site_element/user/authentication.php';
                 
                 }else{
 

@@ -22,9 +22,13 @@ class User{
         &&
         isset($_SESSION['type'])
         &&
-        isset($_SESSION['full_name'])
+        isset($_SESSION['first_name'])
+        &&
+        isset($_SESSION['last_name'])
         &&
         isset($_SESSION['email'])
+        &&
+        isset($_SESSION['phone'])
         &&
         isset($_SESSION['identifier'])
         &&
@@ -34,11 +38,11 @@ class User{
     )
     {
 
-        $q = $db->prepare("SELECT * FROM users WHERE id=:id AND user_key=:user_key AND type=:type");
+        $q = $db->prepare("SELECT * FROM users WHERE id=:id AND type=:type AND user_key=:user_key");
         $q->execute([
         'id' => $_SESSION['id'],
-        'user_key' => $_SESSION['user_key'],
-        'type' => $_SESSION['type']
+        'type' => $_SESSION['type'],
+        'user_key' => $_SESSION['user_key']
         ]);
 
         $user = $q->fetch();
@@ -61,9 +65,13 @@ class User{
         ||
         isset($_SESSION['type'])
         ||
-        isset($_SESSION['full_name'])
+        isset($_SESSION['first_name'])
+        ||
+        isset($_SESSION['last_name'])
         ||
         isset($_SESSION['email'])
+        ||
+        isset($_SESSION['phone'])
         ||
         isset($_SESSION['identifier'])
         ||
@@ -101,9 +109,13 @@ class User{
             &&
             isset($_SESSION['type'])
             &&
-            isset($_SESSION['full_name'])
+            isset($_SESSION['first_name'])
+            &&
+            isset($_SESSION['last_name'])
             &&
             isset($_SESSION['email'])
+            &&
+            isset($_SESSION['phone'])
             &&
             isset($_SESSION['identifier'])
             &&
@@ -113,11 +125,11 @@ class User{
         )
         {
     
-            $q = $db->prepare("SELECT * FROM users WHERE id=:id AND user_key=:user_key AND type=:type");
+            $q = $db->prepare("SELECT * FROM users WHERE id=:id AND type=:type AND user_key=:user_key");
             $q->execute([
             'id' => $_SESSION['id'],
-            'user_key' => $_SESSION['user_key'],
-            'type' => 'admin'
+            'type' => $_SESSION['type'],
+            'user_key' => $_SESSION['user_key']
             ]);
     
             $user = $q->fetch();
@@ -136,19 +148,23 @@ class User{
         }
         elseif
         (
-        isset($_SESSION['id'])
-        ||
-        isset($_SESSION['type'])
-        ||
-        isset($_SESSION['full_name'])
-        ||
-        isset($_SESSION['email'])
-        ||
-        isset($_SESSION['identifier'])
-        ||
-        isset($_SESSION['user_key'])
-        ||
-        isset($_SESSION['asset'])
+            isset($_SESSION['id'])
+            ||
+            isset($_SESSION['type'])
+            ||
+            isset($_SESSION['first_name'])
+            ||
+            isset($_SESSION['last_name'])
+            ||
+            isset($_SESSION['email'])
+            ||
+            isset($_SESSION['phone'])
+            ||
+            isset($_SESSION['identifier'])
+            ||
+            isset($_SESSION['user_key'])
+            ||
+            isset($_SESSION['asset'])
         )
         {
     
@@ -176,18 +192,20 @@ class User{
         * @param string $type
         *
         */
-    public function UserRegister($db,$post,$asset,$type){
+    public function UserRegister($db,$post,$type){
 
         $options = [
         'cost' => 12
         ];
                     
-        $q = $db->prepare("INSERT INTO `users`(`type`,`photo`,`full_name`,`email`,`identifier`,`password`,`adress`,`city`,`zip_code`,`country`,`user_key`,`asset`) VALUES(:type,:photo,:full_name,:email,:identifier,:password,:adress,:city,:zip_code,:country,:user_key,:asset)");
+        $q = $db->prepare("INSERT INTO `users`(`type`,`picture`,`first_name`,`last_name`,`email`,`phone`,`identifier`,`password`,`adress`,`city`,`zip_code`,`country`,`user_key`,`asset`) VALUES(:type,:picture,:first_name,:last_name,:email,:phone,:identifier,:password,:adress,:city,:zip_code,:country,:user_key,:asset)");
         $q->execute([
             'type' => $type,
-            'photo' => 'ressources/img/profile_picture.jpg',
-            'full_name' => $post['post_full_name'],
+            'picture' => 'ressources/img/profile_picture.jpg',
+            'first_name' => $post['post_first_name'],
+            'last_name' => $post['post_last_name'],
             'email' => $post['post_email'],
+            'phone' => $post['post_phone'],
             'identifier' => $post['post_identifier'],
             'password' => password_hash($post['post_password'], PASSWORD_BCRYPT, $options),
             'adress' => $post['post_adress'],
@@ -222,7 +240,7 @@ class User{
         */
     public function UserLogin($db,$post){
 
-        $user = $this->getUser($db,$post);
+        $user = $this->getUserIdentifier($db,$post);
 
         if($user == TRUE){
 
@@ -232,10 +250,13 @@ class User{
 
                     $_SESSION['id'] = $user['id'];
                     $_SESSION['type'] = $user['type'];
-                    $_SESSION['full_name'] = $user['full_name'];
+                    $_SESSION['first_name'] = $user['first_name'];
+                    $_SESSION['last_name'] = $user['last_name'];
                     $_SESSION['email'] = $user['email'];
+                    $_SESSION['phone'] = $user['phone'];
                     $_SESSION['identifier'] = $user['identifier'];
                     $_SESSION['user_key'] = $user['user_key'];
+                    $_SESSION['asset'] = $user['asset'];
     
                     return 0;
             
@@ -276,10 +297,12 @@ class User{
             'cost' => 12
             ];
 
-            $q = $db->prepare("UPDATE users SET full_name=:full_name, adress=:adress, city=:city, zip_code=:zip_code, country=:country WHERE id=:id");
+            $q = $db->prepare("UPDATE users SET first_name=:first_name, last_name=:last_name, phone=:phone, adress=:adress, city=:city, zip_code=:zip_code, country=:country WHERE id=:id");
             $q->execute([
                 'id' => $user['id'],
-                'full_namen'=> $post['post_full_name'],
+                'first_name' => $post['post_first_name'],
+                'last_name' => $post['post_last_name'],
+                'phone' => $post['post_phone'],
                 'adress'=> $post['post_adress'],
                 'city'=> $post['post_city'],
                 'zip_code'=> $post['post_zip_code'],
@@ -437,132 +460,127 @@ class User{
 
         }
     
-        }
+    }
 
 
-        
+
     /**
-        * Retrieve user information
+        * Retrieve user information asset by identifier and email
         *
         * @param Object database connection
         *
         * @param array post user information
         *
         */
-    public function getUser($db,$post){
+    public function getUserIdentifierAndEmail($db,$post){
 
-        if(isset($post['id'])){
+        if(isset($post['post_identifier']) && isset($post['post_email'])){
 
-        $q = $db->prepare("SELECT * FROM users WHERE id=:id");
-        $q->execute([
-        'id' => $post['id']
-        ]);
+            $q = $db->prepare("SELECT * FROM users WHERE identifier=:identifier OR email:email");
+            $q->execute([
+            'identifier' => $post['post_identifier'],
+            'email' => $post['post_email']
+            ]);
 
-        $user = $q->fetch();
+            $user = $q->fetch();
 
-        }elseif((isset($post['post_identifier'])) && (isset($post['post_email']))){
+            if($user == TRUE){
 
-        $q = $db->prepare("SELECT * FROM users WHERE identifier=:identifier OR email=:email");
-        $q->execute([
-        'identifier' => $post['post_identifier'],
-        'email' => $post['post_email']
-        ]);
+            return $user;
 
-        $user = $q->fetch();
-
-        }elseif(isset($post['post_identifier'])){
-
-        $q = $db->prepare("SELECT * FROM users WHERE identifier=:identifier OR email=:email");
-        $q->execute([
-        'identifier' => $post['post_identifier'],
-        'email' => $post['post_identifier']
-        ]);
-
-        $user = $q->fetch();
-
-        }elseif(isset($post['post_email'])){
-
-        $q = $db->prepare("SELECT * FROM users WHERE email=:email");
-        $q->execute([
-        'email' => $post['post_email']
-        ]);
-
-        $user = $q->fetch();
-
+            }
         }
-
-        if($user == TRUE){
-
-        return $user;
-
-        }
-
     }
 
 
 
     /**
-        * Retrieve user information asset
+        * Retrieve user information asset by identifier
         *
         * @param Object database connection
         *
         * @param array post user information
         *
         */
-    public function getUserAsset($db,$post){
+    public function getUserIdentifier($db,$post){
+
+        if(isset($post['post_identifier'])){
+
+            $q = $db->prepare("SELECT * FROM users WHERE email=:email OR identifier=:identifier AND asset=:asset");
+            $q->execute([
+            'email' => $post['post_identifier'],
+            'identifier' => $post['post_identifier'],
+            'asset' => 'yes'
+            ]);
+
+            $user = $q->fetch();
+
+            if($user == TRUE){
+
+            return $user;
+
+            }
+        }
+    }
+
+
+
+    /**
+        * Retrieve user information asset by email
+        *
+        * @param Object database connection
+        *
+        * @param array post user information
+        *
+        */
+    public function getUserEmail($db,$post){
+
+        if(isset($post['post_email'])){
+
+            $q = $db->prepare("SELECT * FROM users WHERE email=:email AND asset=:asset");
+            $q->execute([
+            'email' => $post['post_email'],
+            'asset' => 'yes'
+            ]);
+
+            $user = $q->fetch();
+
+            if($user == TRUE){
+
+            return $user;
+
+            }
+        }
+    }
+
+
+
+    /**
+        * Retrieve user information asset by id
+        *
+        * @param Object database connection
+        *
+        * @param array post user information
+        *
+        */
+    public function getUserId($db,$post){
 
         if(isset($post['id'])){
 
-        $q = $db->prepare("SELECT * FROM users WHERE id=:id AND asset=:asset");
-        $q->execute([
-        'asset' => 'banished',
-        'id' => $post['id']
-        ]);
+            $q = $db->prepare("SELECT * FROM users WHERE id=:id");
+            $q->execute([
+            'id' => $post['id']
+            ]);
 
-        $user = $q->fetch();
+            $user = $q->fetch();
 
-        }elseif((isset($post['post_identifier'])) && (isset($post['post_email']))){
+            if($user == TRUE){
 
-        $q = $db->prepare("SELECT * FROM users WHERE identifier=:identifier OR email=:email AND asset=:asset");
-        $q->execute([
-        'identifier' => $post['post_identifier'],
-        'email' => $post['post_email'],
-        'asset' => 'banished'
-        ]);
+            return $user;
 
-        $user = $q->fetch();
-
-        }elseif(isset($post['post_identifier'])){
-
-        $q = $db->prepare("SELECT * FROM users WHERE identifier=:identifier OR email=:email AND asset=:asset");
-        $q->execute([
-        'identifier' => $post['post_identifier'],
-        'email' => $post['post_identifier'],
-        'asset' => 'banished'
-        ]);
-
-        $user = $q->fetch();
-
-        }elseif(isset($post['post_email'])){
-
-        $q = $db->prepare("SELECT * FROM users WHERE email=:email AND asset=:asset");
-        $q->execute([
-        'email' => $post['post_email'],
-        'asset' => 'banished'
-        ]);
-
-        $user = $q->fetch();
-
+            }
         }
-
-        if($user == TRUE){
-
-        return $user;
-
-        }
-
     }
-        
 
 }
 

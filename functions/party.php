@@ -115,6 +115,30 @@ class Party{
 
     }
 
+
+
+    /**
+        * Retrieve party information
+        *
+        * @param Object database connection
+        *
+        * @param array post party information
+        *
+        */
+    public function getParty($db,$party){
+
+        $q = $db->prepare("SELECT * FROM partys WHERE asset=:asset AND id=:id");
+        $q->execute([
+        'asset' => "asset",
+        'id' => $party['party']
+        ]);
+
+        $party = $q->fetch();
+
+        return $party;
+
+    }
+
 }
 
 $Party = new Party();

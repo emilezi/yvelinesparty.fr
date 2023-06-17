@@ -14,12 +14,16 @@ class Form{
         * @return int if the fields are correctly filled in otherwise return the error number
         *
         */
-        public function FormRegisterCheck($post){
+    public function FormRegisterCheck($post){
 
             if(
-            !empty($post['post_full_name'])
+            !empty($post['post_first_name'])
+            &&
+            !empty($post['post_last_name'])
             &&
             !empty($post['post_email'])
+            &&
+            !empty($post['post_phone'])
             &&
             !empty($post['post_identifier'])
             &&
@@ -37,9 +41,13 @@ class Form{
             )
             {
                 if(
-                preg_match("#^[^<>]+$#i", $post['post_full_name'])
+                preg_match("#^[^<>]+$#i", $post['post_first_name'])
+                &&
+                preg_match("#^[^<>]+$#i", $post['post_last_name'])
                 &&
                 preg_match("#^[a-z0-9.]+@[a-z0-9.]+$#i", $post['post_email'])
+                &&
+                preg_match("#^[0-9]+$#i", $post['post_phone'])
                 &&
                 preg_match("#^[a-z0-9]+$#i", $post['post_identifier'])
                 &&
@@ -52,11 +60,16 @@ class Form{
                 preg_match("#^[^<>]+$#i", $post['post_country'])
                 )
                 {
+
                     return 0;
+
                 }else{
+
                     return 1;
+
                 }
             }else{
+
                 return 2;
     
             }
@@ -104,42 +117,176 @@ class Form{
         * @return int if the fields are correctly filled in otherwise return the error number
         *
         */
-    public function FormUserEditCheck($post){
+    public function FormEditUserCheck($post){
 
-        if(
-        !empty($post['post_full_name'])
-        &&
-        !empty($post['post_adress'])
-        &&
-        !empty($post['post_city'])
-        &&
-        !empty($post['post_zip_code'])
-        &&
-        !empty($post['post_country'])
-        )
-        {
-        if(
-            preg_match("#^[^<>]+$#i", $post['post_full_name'])
+            if(
+            !empty($post['post_first_name'])
             &&
-            preg_match("#^[^<>]+$#i", $post['post_adress'])
+            !empty($post['post_last_name'])
             &&
-            preg_match("#^[^<>]+$#i", $post['post_city'])
+            !empty($post['post_phone'])
             &&
-            preg_match("#^[a-z0-9]+$#i", $post['post_zip_code'])
+            !empty($post['post_adress'])
             &&
-            preg_match("#^[^<>]+$#i", $post['post_country'])
+            !empty($post['post_city'])
+            &&
+            !empty($post['post_zip_code'])
+            &&
+            !empty($post['post_country'])
             )
             {
-                return 0;
+            if(
+                preg_match("#^[^<>]+$#i", $post['post_first_name'])
+                &&
+                preg_match("#^[^<>]+$#i", $post['post_last_name'])
+                &&
+                preg_match("#^[0-9]+$#i", $post['post_phone'])
+                &&
+                preg_match("#^[^<>]+$#i", $post['post_adress'])
+                &&
+                preg_match("#^[^<>]+$#i", $post['post_city'])
+                &&
+                preg_match("#^[a-z0-9]+$#i", $post['post_zip_code'])
+                &&
+                preg_match("#^[^<>]+$#i", $post['post_country'])
+                )
+                {
+                    return 0;
+                }else{
+                    return 1;
+                }
             }else{
-                return 1;
+                return 2;
+    
             }
-        }else{
-            return 2;
+    
+        }
+
+
+
+    /**
+        * Verification of the fields entered for the registered party
+        *
+        * @param array news partys information form
+        *
+        * @return int if the fields are correctly filled in otherwise return the error number
+        *
+        */
+    public function FormRegisterPartyCheck($post){
+
+        if(
+            !empty($post['post_name'])
+            &&
+            !empty($post['post_category'])
+            &&
+            !empty($post['post_description'])
+            &&
+            !empty($post['post_themes'])
+            &&
+            !empty($post['post_interest'])
+            &&
+            !empty($post['post_music'])
+            &&
+            !empty($post['post_place'])
+            &&
+            !empty($post['post_address'])
+            &&
+            !empty($post['post_of_date'])
+            &&
+            !empty($post['post_to_date'])
+            &&
+            !empty($post['post_max_participants'])
+            )
+            {
+            if(
+                preg_match("#^[^<>]+$#i", $post['post_name'])
+                &&
+                preg_match("#^[^<>]+$#i", $post['post_category'])
+                &&
+                preg_match("#^[^<>]+$#i", $post['post_description'])
+                &&
+                preg_match("#^[^<>]+$#i", $post['post_themes'])
+                &&
+                preg_match("#^[^<>]+$#i", $post['post_interest'])
+                &&
+                preg_match("#^[^<>]+$#i", $post['post_music'])
+                &&
+                preg_match("#^[^<>]+$#i", $post['post_place'])
+                &&
+                preg_match("#^[^<>]+$#i", $post['post_address'])
+                &&
+                preg_match("#^[^<>]+$#i", $post['post_of_date'])
+                &&
+                preg_match("#^[^<>]+$#i", $post['post_to_date'])
+                &&
+                preg_match("#^[^<>]+$#i", $post['post_max_participants'])
+                )
+                {
+                    return 0;
+                }else{
+                    return 1;
+                }
+            }else{
+                return 2;
+    
+            }
 
         }
 
-    }
+
+
+    /**
+        * Verification of the fields entered for the editing party
+        *
+        * @param array form post editing party information
+        *
+        * @return int if the fields are correctly filled in otherwise return the error number
+        *
+        */
+    public function FormEditPartyCheck($post){
+
+        if(
+            !empty($post['post_name'])
+            &&
+            !empty($post['post_description'])
+            &&
+            !empty($post['post_place'])
+            &&
+            !empty($post['post_address'])
+            &&
+            !empty($post['post_of_date'])
+            &&
+            !empty($post['post_to_date'])
+            &&
+            !empty($post['post_max_participants'])
+            )
+            {
+            if(
+                preg_match("#^[^<>]+$#i", $post['post_name'])
+                &&
+                preg_match("#^[^<>]+$#i", $post['post_description'])
+                &&
+                preg_match("#^[^<>]+$#i", $post['post_place'])
+                &&
+                preg_match("#^[^<>]+$#i", $post['post_address'])
+                &&
+                preg_match("#^[^<>]+$#i", $post['post_of_date'])
+                &&
+                preg_match("#^[^<>]+$#i", $post['post_to_date'])
+                &&
+                preg_match("#^[^<>]+$#i", $post['post_max_participants'])
+                )
+                {
+                    return 0;
+                }else{
+                    return 1;
+                }
+            }else{
+                return 2;
+    
+            }
+
+        }
 
 
 
@@ -151,7 +298,7 @@ class Form{
         * @return int if the fields are correctly filled in otherwise return the error number
         *
         */
-        public function FormIdentifierCheck($post){
+    public function FormIdentifierCheck($post){
 
             if(!empty($post['post_identifier']))
             {
